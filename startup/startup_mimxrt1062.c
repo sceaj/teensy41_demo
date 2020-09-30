@@ -15,8 +15,6 @@
 #pragma GCC optimize ("Og")
 #endif // (DEBUG)
 
-#include "fsl_device_registers.h"
-
 #if defined (__cplusplus)
 #ifdef __REDLIB__
 #error Redlib does not support C++
@@ -657,16 +655,8 @@ extern unsigned int __bss_section_table_end;
 __attribute__ ((section(".after_vectors.reset")))
 void ResetISR(void) {
 
-    // LED - if startup crashes, use this to turn on the LED early for troubleshooting
-    IOMUXC->SW_MUX_CTL_PAD[kIOMUXC_SW_MUX_CTL_PAD_GPIO_B0_03] = 5;
-    IOMUXC->SW_PAD_CTL_PAD[kIOMUXC_SW_PAD_CTL_PAD_GPIO_B0_03] = IOMUXC_SW_PAD_CTL_PAD_DSE(0x07);
-    IOMUXC_GPR->GPR27 = 0xFFFFFFFF;
-    GPIO7->GDIR |= (1<<3);
-    GPIO7->DR_SET = (1<<3); // digitalWrite(13, HIGH);
-
     // Disable interrupts
     __asm volatile ("cpsid i");
-
 
 #if defined (__USE_CMSIS)
 // If __USE_CMSIS defined, then call CMSIS SystemInit code

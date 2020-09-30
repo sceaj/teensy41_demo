@@ -37,6 +37,116 @@ component:
  * BOARD_InitPeripherals functional group
  **********************************************************************************************************************/
 /***********************************************************************************************************************
+ * FATFS initialization code
+ **********************************************************************************************************************/
+/* clang-format off */
+/* TEXT BELOW IS USED AS SETTING FOR TOOLS *************************************
+instance:
+- name: 'FATFS'
+- type: 'fatfs'
+- mode: 'general'
+- custom_name_enabled: 'false'
+- type_id: 'fatfs_2f85acf758668258920f70258052a088'
+- functional_group: 'BOARD_InitPeripherals'
+- config_sets:
+  - init_config:
+    - initConfig:
+      - initPartitionsStr: 'false'
+      - multiplePartitions:
+        - 0:
+          - Volume: '0'
+          - Partition: 'autoDetect'
+        - 1:
+          - Volume: '0'
+          - Partition: 'autoDetect'
+      - enablePhysicalLayerInit: 'false'
+      - diskConfig:
+        - initFunctionID: 'FATFS_DiskInit'
+      - initResultObject: 'true'
+      - resultName: 'FATFS_Result'
+      - fatfsObjects:
+        - 0:
+          - objID: 'FATFS_System_0'
+          - diskMount: 'true'
+          - mountPath: '0:'
+          - mountInitOpt: 'false'
+      - filObjects: []
+      - filInfoObjects: []
+      - dirObjects: []
+  - ff_config:
+    - revisionID: 'rev14_1'
+    - MSDKadaptation: 'RAM_DISK_ENABLE'
+    - functionConfig:
+      - FF_FS_READONLY: 'false'
+      - FF_FS_MINIMIZE: 'level1'
+      - FF_USE_STRFUNC: 'enableWithoutConversion'
+      - FF_USE_FIND: 'disableDirRead'
+      - FF_USE_MKFS: 'true'
+      - FF_USE_FASTSEEK: 'false'
+      - FF_USE_EXPAND: 'false'
+      - FF_USE_CHMOD: 'false'
+      - FF_USE_LABEL: 'false'
+      - FF_USE_FORWARD: 'false'
+    - namespaceConfig:
+      - FF_USE_LFN: 'enableLfnStatic'
+      - FF_MAX_LFN: '255'
+      - FF_LFN_BUF: 'LFNID'
+      - FF_SFN_BUF: 'SFNID'
+      - FF_LFN_UNICODE: 'UTF8'
+      - FF_STRF_ENCODE: 'UTF8'
+      - FF_CODE_PAGE: 'cpUS'
+      - FF_FS_RPATH: 'enableRP2'
+    - driveConfig:
+      - FF_VOLUMES: '6'
+      - FF_STR_VOLUME_ID: 'numericId'
+      - volumes:
+        - 0:
+          - volumeStr: 'RAM'
+        - 1:
+          - volumeStr: 'NAND'
+        - 2:
+          - volumeStr: 'CF'
+        - 3:
+          - volumeStr: 'SD'
+        - 4:
+          - volumeStr: 'SD2'
+        - 5:
+          - volumeStr: 'USB'
+      - FF_MULTI_PARTITION: 'false'
+      - FF_MIN_SS: 'value512'
+      - FF_MAX_SS: 'value512'
+      - FF_LBA64: 'false'
+      - FF_MIN_GPT: '0x100000000'
+      - FF_USE_TRIM: 'false'
+    - systemConfig:
+      - FF_FS_TINY: 'false'
+      - FF_FS_EXFAT: 'true'
+      - FF_FS_NORTC: 'true'
+      - FF_NORTC_MON: '1'
+      - FF_NORTC_MDAY: '1'
+      - FF_NORTC_YEAR: '2020'
+      - FF_FS_NOFSINFO: ''
+      - FF_FS_LOCK: '0'
+      - FF_FS_REENTRANT: 'false'
+      - FF_FS_TIMEOUT: '1000'
+      - FF_SYNC_t: 'HANDLE'
+      - includeOS: 'false'
+      - headerFileName: 'somertos.h'
+    - fatfs_codegenerator: []
+ * BE CAREFUL MODIFYING THIS COMMENT - IT IS YAML SETTINGS FOR TOOLS **********/
+/* clang-format on */
+/* FATFS System object */
+FATFS FATFS_System_0;
+/* FATFS Result object */
+FRESULT FATFS_Result;
+
+static void FATFS_init(void) {
+  /* FATFS Filesystem work area initialization */
+  FATFS_Result = f_mount(&FATFS_System_0, (const TCHAR*)"0:", 0);
+  assert(FATFS_Result == FR_OK);
+}
+
+/***********************************************************************************************************************
  * LPUART1 initialization code
  **********************************************************************************************************************/
 /* clang-format off */
@@ -100,6 +210,7 @@ static void LPUART1_init(void) {
 void BOARD_InitPeripherals(void)
 {
   /* Initialize components */
+  FATFS_init();
   LPUART1_init();
 }
 

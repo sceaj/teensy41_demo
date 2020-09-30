@@ -37,6 +37,17 @@ extern "C" {
  */
 void BOARD_InitBootPins(void);
 
+/* GPIO_B0_03 (coord D8), LED */
+/* Routed pin properties */
+#define BOARD_INITPINS_LED_PERIPHERAL                                      GPIO2   /*!< Peripheral name */
+#define BOARD_INITPINS_LED_SIGNAL                                        gpio_io   /*!< Signal name */
+#define BOARD_INITPINS_LED_CHANNEL                                            3U   /*!< Signal channel */
+
+/* Symbols to be used with GPIO driver */
+#define BOARD_INITPINS_LED_GPIO                                            GPIO2   /*!< GPIO peripheral base pointer */
+#define BOARD_INITPINS_LED_GPIO_PIN                                           3U   /*!< GPIO pin number */
+#define BOARD_INITPINS_LED_GPIO_PIN_MASK                              (1U << 3U)   /*!< GPIO pin mask */
+
 
 /*!
  * @brief Configures pin routing and optionally pin electrical features.
